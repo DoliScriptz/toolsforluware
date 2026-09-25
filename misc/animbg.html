@@ -353,8 +353,91 @@
 
     <div class="field">
       <label for="mediaInput">Choose GIF or video</label>
-      <input id="mediaInput" type="file" accept="image/gif,video
+      <input id="mediaInput" type="file" accept="image/gif,video/*" />
+    </div>
 
+    <div class="field">
+      <label id="nameLabel" for="nameInput">Output name</label>
+      <input id="nameInput" type="text" value="sprite_sheet" placeholder="e.g. hero_background" />
+    </div>
+
+    <div class="field">
+      <label for="soundInput">Optional audio</label>
+      <input id="soundInput" type="file" accept="audio/*" />
+    </div>
+
+    <label class="switch" for="autoToggle">
+      <span>Auto optimize settings</span>
+      <input id="autoToggle" type="checkbox" checked />
+    </label>
+
+    <div class="slider-wrap">
+      <div class="slider-row"><span>Frames per second</span><strong class="slider-val" id="fpsLabel">12</strong></div>
+      <input id="fpsSlider" type="range" min="1" max="60" value="12" />
+    </div>
+
+    <div class="field">
+      <label for="skipInput">Skip frames</label>
+      <input id="skipInput" type="number" min="0" max="100" value="0" />
+    </div>
+
+    <div class="field">
+      <label>Sheet resolution</label>
+      <div class="custom-select" id="resPreset">
+        <button class="csel-trigger" id="resPresetTrigger" type="button" aria-expanded="false" aria-haspopup="listbox">
+          <span class="csel-name" id="resPresetName">Balanced</span>
+          <span class="csel-res" id="resPresetRes">3560 × 3560</span>
+          <span class="csel-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="csel-dropdown" id="resPresetDropdown" role="listbox">
+          <div class="csel-option selected" data-value="balanced" data-w="3560" data-h="3560" role="option"><span>Balanced</span><span class="opt-res">3560 × 3560</span></div>
+          <div class="csel-option" data-value="compact" data-w="2048" data-h="2048" role="option"><span>Compact</span><span class="opt-res">2048 × 2048</span></div>
+          <div class="csel-option" data-value="large" data-w="5012" data-h="5012" role="option"><span>Large</span><span class="opt-res">5012 × 5012</span></div>
+          <div class="csel-option" data-value="custom" role="option"><span>Custom</span><span class="opt-res">set size</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="custom-res-row" id="customResWrap" style="display:none">
+      <input id="customResW" type="number" min="256" max="5012" value="3560" aria-label="Custom width" />
+      <span class="custom-res-x">×</span>
+      <input id="customResH" type="number" min="256" max="5012" value="3560" aria-label="Custom height" />
+    </div>
+
+    <div class="slider-wrap">
+      <div class="slider-row"><span>Frame resolution</span><strong class="slider-val" id="resLabel">100%</strong></div>
+      <input id="resSlider" type="range" min="10" max="100" value="100" />
+    </div>
+
+    <div class="row">
+      <button id="buildBtn" type="button" disabled>Build ZIP</button>
+      <button id="clearBtn" class="secondary" type="button" disabled>Clear</button>
+    </div>
+    <div class="gif-suggestion" id="gifSuggestion">
+      <div class="gif-suggestion-text">GIF playback may be limited in this browser. Convert it to a playable source before building.</div>
+      <button id="gifConvertBtn" type="button" disabled>Build with playback fallback</button>
+    </div>
+    <div class="progress" aria-live="polite">
+      <div class="progress-head"><span class="progress-title" id="progressTitle">Waiting...</span><span class="progress-percent" id="progressPercent">0%</span></div>
+      <div class="bar"><div class="bar-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText"></div>
+    </div>
+  </section>
+
+  <section class="card preview" id="previewCard">
+    <div class="eyebrow"><span></span> LIVE OUTPUT</div>
+    <div class="sheet-box"><canvas id="sheetCanvas" width="1" height="1"></canvas></div>
+    <div class="meta">
+      <div class="pill"><strong id="outFrames">No Data</strong>Frames</div>
+      <div class="pill"><strong id="outGrid">No Data</strong>Grid</div>
+      <div class="pill"><strong id="outSize">No Data</strong>Sheet size</div>
+      <div class="pill"><strong id="outFrameSize">No Data</strong>Frame size</div>
+    </div>
+    <p class="tiny">Choose a source, tune the settings, then build a ZIP containing the sprite sheet and metadata.</p>
+  </section>
+</main>
+<footer class="site-footer"><p class="tiny">LuWare Background Maker</p></footer>
+
+<script>
 const mediaInput    = document.getElementById("mediaInput");
 const nameInput     = document.getElementById("nameInput");
 const nameLabel     = document.getElementById("nameLabel");
@@ -400,6 +483,7 @@ const customResW       = document.getElementById("customResW");
 const customResH       = document.getElementById("customResH");
 
 let currentFile = null;
+let currentSoundFile = null;
 let lastProgressValue = 0;
 let currentJson = "";
 
