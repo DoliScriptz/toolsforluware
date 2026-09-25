@@ -336,11 +336,11 @@
     :root{--luware-ink:#050912;--luware-panel:#0d1728;--luware-blue:#78aefc;--luware-violet:#5964f2;--luware-mint:#45d8a2}
     body{background-color:var(--luware-ink);background-image:radial-gradient(ellipse at 78% 12%,rgba(89,100,242,.18),transparent 30%),radial-gradient(ellipse at 12% 82%,rgba(69,216,162,.07),transparent 25%),linear-gradient(180deg,#050912 0%,#07101e 100%)}
     body:after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 0%,transparent 0,rgba(5,9,18,.2) 55%,rgba(5,9,18,.64) 100%);z-index:-1}
-    .site-header{height:76px;padding-inline:clamp(20px,7vw,96px);border-color:rgba(120,174,252,.13)}
-    .brand{gap:10px}.brand:before{content:"L";display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(120,174,252,.3);border-radius:11px;background:linear-gradient(145deg,#162542,#0b1323);color:#8fc0ff;font-weight:800;font-size:1.05rem;box-shadow:0 0 26px rgba(89,100,242,.18)}
-    .brand img{display:none}.brand span{font-size:1.05rem;letter-spacing:-.04em}
-    nav a{font-size:.78rem;letter-spacing:.02em}nav a:hover{color:var(--luware-blue)}
-    .discord-link{padding:11px 19px!important;background:linear-gradient(135deg,var(--luware-blue),var(--luware-violet));box-shadow:0 10px 30px rgba(89,100,242,.25)}
+    .site-header{height:76px;padding:0 clamp(20px,7vw,96px);border-color:rgba(120,174,252,.13);gap:24px}
+    .brand{gap:10px;min-width:0;flex:0 1 auto}.brand:before{content:"L";display:none;place-items:center;width:34px;height:34px;border:1px solid rgba(120,174,252,.3);border-radius:11px;background:linear-gradient(145deg,#162542,#0b1323);color:#8fc0ff;font-weight:800;font-size:1.05rem;box-shadow:0 0 26px rgba(89,100,242,.18)}
+    .brand img{display:block;width:34px;height:34px;flex:0 0 34px;object-fit:contain;border:0;border-radius:10px;background:transparent}.brand span{font-size:1.05rem;letter-spacing:-.04em}
+    nav{min-width:0;flex:0 1 auto}nav a{font-size:.78rem;letter-spacing:.02em;white-space:nowrap}nav a:hover{color:var(--luware-blue)}
+    .discord-link{display:inline-flex;align-items:center;justify-content:center;padding:11px 19px!important;background:linear-gradient(135deg,var(--luware-blue),var(--luware-violet));box-shadow:0 10px 30px rgba(89,100,242,.25)}
     .app{padding-top:clamp(58px,9vw,108px);gap:36px}
     .card{background:linear-gradient(145deg,rgba(15,27,47,.91),rgba(7,13,24,.84));border-color:rgba(143,164,205,.16);box-shadow:0 30px 90px rgba(0,0,0,.34)}
     .controls{padding:32px}.preview{padding:26px}
@@ -387,7 +387,7 @@
   <nav aria-label="Primary navigation">
     <a href="#controlsCard">Builder</a>
     <a href="#previewCard">Preview</a>
-    <a class="discord-link" href="https://discord.com" target="_blank" rel="noreferrer">Join Discord</a>
+    <a class="discord-link" href="https://discord.gg/WqfkmTKKWh" target="_blank" rel="noopener noreferrer">Join Discord</a>
   </nav>
 </header>
 <main class="app" id="top">
