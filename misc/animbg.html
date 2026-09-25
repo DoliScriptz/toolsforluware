@@ -331,6 +331,28 @@
     nav{display:flex;align-items:center;gap:30px}nav a{color:#748098;text-decoration:none;font-size:.8rem;transition:color .2s}nav a:hover{color:#eaf0ff}.discord-link{padding:11px 18px;border-radius:999px!important;color:#f5f8ff!important;background:linear-gradient(135deg,#78aefc,#5362e8);box-shadow:0 8px 24px rgba(83,98,232,.28)}
     .app{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:88px 0 32px;display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:34px;align-items:start}.card{border-radius:20px;background:linear-gradient(145deg,rgba(16,25,43,.88),rgba(7,13,24,.78));border:1px solid var(--border);box-shadow:0 25px 80px rgba(0,0,0,.28);cursor:default}.controls,.preview{padding:28px}.controls{position:relative;overflow:visible}.controls:after{content:"";position:absolute;width:220px;height:220px;right:-120px;top:-120px;background:rgba(86,113,237,.14);filter:blur(70px);pointer-events:none}.eyebrow{font-size:.68rem;letter-spacing:.18em;color:#7899ca;font-weight:700;margin-bottom:24px}.eyebrow span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#45d8a2;box-shadow:0 0 12px #45d8a2;margin-right:9px}h1{font-size:clamp(2.45rem,5vw,4rem);line-height:.96;letter-spacing:-.075em;font-weight:300;margin-bottom:22px}h1 em{font-style:normal;color:#74a9fb}.intro{color:#8490a9;font-size:.92rem;line-height:1.7;max-width:390px;margin-bottom:24px}label{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#8b98b1}.field{gap:8px}.card input,.csel-trigger,.slider-wrap,.switch,.progress,.pill{border-radius:12px;background:rgba(255,255,255,.035);border-color:rgba(143,164,205,.16)}input[type="file"],input[type="text"],input[type="number"]{padding:12px 13px;border-radius:10px}.csel-dropdown{border-radius:12px;overflow:hidden;background:#101a2b;border-color:rgba(120,174,252,.38)}.csel-option{padding:12px}.switch{padding:13px 14px}.switch input{accent-color:#6c8df4}.slider-wrap{padding:14px}.slider-val{color:#81b5ff}.row{gap:10px}.row button{border-radius:999px;padding:12px 18px;background:linear-gradient(135deg,#5864ee,#80b0fb);box-shadow:0 10px 22px rgba(82,99,232,.22)}button.secondary{background:rgba(255,255,255,.05);box-shadow:none}.progress{padding:15px}.bar{border-radius:99px}.bar-fill{border-radius:99px}.pill{padding:12px 13px}.sheet-box{min-height:580px;border-radius:14px;background:#070d18;border-color:rgba(143,164,205,.16);box-shadow:inset 0 0 60px rgba(44,78,140,.1)}.site-footer{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:0 0 32px;display:flex;justify-content:space-between;color:#536079;font-size:.72rem;letter-spacing:.04em}.tiny{color:#65738e}
     @media(max-width:900px){nav a:not(.discord-link){display:none}.app{padding-top:48px;grid-template-columns:1fr}.sheet-box{min-height:320px}.site-footer{padding-top:4px}}
+
+    /* LuWare visual system: midnight canvas, electric blue action color, quiet glass surfaces. */
+    :root{--luware-ink:#050912;--luware-panel:#0d1728;--luware-blue:#78aefc;--luware-violet:#5964f2;--luware-mint:#45d8a2}
+    body{background-color:var(--luware-ink);background-image:radial-gradient(ellipse at 78% 12%,rgba(89,100,242,.18),transparent 30%),radial-gradient(ellipse at 12% 82%,rgba(69,216,162,.07),transparent 25%),linear-gradient(180deg,#050912 0%,#07101e 100%)}
+    body:after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 0%,transparent 0,rgba(5,9,18,.2) 55%,rgba(5,9,18,.64) 100%);z-index:-1}
+    .site-header{height:76px;padding-inline:clamp(20px,7vw,96px);border-color:rgba(120,174,252,.13)}
+    .brand{gap:10px}.brand:before{content:"L";display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(120,174,252,.3);border-radius:11px;background:linear-gradient(145deg,#162542,#0b1323);color:#8fc0ff;font-weight:800;font-size:1.05rem;box-shadow:0 0 26px rgba(89,100,242,.18)}
+    .brand img{display:none}.brand span{font-size:1.05rem;letter-spacing:-.04em}
+    nav a{font-size:.78rem;letter-spacing:.02em}nav a:hover{color:var(--luware-blue)}
+    .discord-link{padding:11px 19px!important;background:linear-gradient(135deg,var(--luware-blue),var(--luware-violet));box-shadow:0 10px 30px rgba(89,100,242,.25)}
+    .app{padding-top:clamp(58px,9vw,108px);gap:36px}
+    .card{background:linear-gradient(145deg,rgba(15,27,47,.91),rgba(7,13,24,.84));border-color:rgba(143,164,205,.16);box-shadow:0 30px 90px rgba(0,0,0,.34)}
+    .controls{padding:32px}.preview{padding:26px}
+    .eyebrow{color:#80a6dc;letter-spacing:.2em}.eyebrow span{background:var(--luware-mint);box-shadow:0 0 14px var(--luware-mint)}
+    h1{font-size:clamp(2.8rem,5.6vw,4.5rem);font-weight:300;letter-spacing:-.085em}h1 em{color:var(--luware-blue)}
+    .intro{color:#8c99b0;max-width:395px}
+    .card input,.csel-trigger,.slider-wrap,.switch,.progress,.pill{background:rgba(255,255,255,.028);border-color:rgba(143,164,205,.15)}
+    .card input:focus,.csel-trigger:hover,.custom-select.open .csel-trigger{border-color:rgba(120,174,252,.8);box-shadow:0 0 0 3px rgba(120,174,252,.12)}
+    button{background:linear-gradient(135deg,var(--luware-violet),var(--luware-blue));box-shadow:0 12px 28px rgba(89,100,242,.2)}
+    button.secondary{border-color:rgba(143,164,205,.2);color:#cbd6ea}
+    .sheet-box{background:#070d18;border-color:rgba(120,174,252,.18);box-shadow:inset 0 0 60px rgba(89,100,242,.06)}
+    .site-footer{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:0 0 30px;text-align:center}.site-footer .tiny{color:#58667e;letter-spacing:.04em}
   </style>
 </head>
 <body>
@@ -347,9 +369,9 @@
 </header>
 <main class="app" id="top">
   <section class="card controls" id="controlsCard">
-    <div class="eyebrow"><span></span> OVERDRIVE BACKGROUND MAKER</div>
-    <h1>Build more.<br><em>Wait less.</em></h1>
-    <p class="intro">Create polished sprite sheets from GIFs and videos. Tune your output, preview it instantly, and download everything as a ready-to-use ZIP.</p>
+    <div class="eyebrow"><span></span> LUWARE ANIMATION TOOLKIT</div>
+    <h1>Animate more.<br><em>Wait less.</em></h1>
+    <p class="intro">Turn GIFs and videos into polished sprite sheets. Tune your output, preview it instantly, and download a ready-to-use ZIP for your next LuWare build.</p>
 
     <div class="field">
       <label for="mediaInput">Choose GIF or video</label>
