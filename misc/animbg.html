@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LuWare · Background Maker</title>
+  <title>LuWare Background Maker</title>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <style>
     :root{
@@ -228,12 +228,12 @@
     .preview{padding:18px}
     @media (max-width:900px){.app{grid-template-columns:1fr}}
 
-    
+    /*  Safari: background-attachment:fixed broken on iOS  */
     @supports (-webkit-touch-callout:none){
       body{background-attachment:scroll}
     }
 
-    
+    /*  Custom Select  */
     .custom-select{position:relative;-webkit-user-select:none;user-select:none}
     .csel-trigger{
       display:flex;align-items:center;gap:8px;
@@ -281,19 +281,19 @@
     .csel-option .opt-res{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
     .csel-option.selected .opt-res{color:rgba(110,168,254,.65)}
 
-    
+    /*  Custom resolution inputs  */
     .custom-res-row{display:flex;align-items:center;gap:8px}
     .custom-res-row input[type="number"]{flex:1;min-width:0;text-align:center}
     .custom-res-x{color:var(--muted);font-weight:700;font-size:1rem;flex-shrink:0}
 
-    
+    /*  Name required validation  */
     input.name-required{
       border-color:var(--err) !important;
       box-shadow:0 0 0 2px rgba(248,113,113,.18) !important;
     }
     .req-star{color:var(--err);margin-left:2px}
 
-    
+    /*  GIF conversion suggestion (shown when frames are being skipped)  */
     .gif-suggestion{
       display:none;
       padding:12px 14px;
@@ -312,48 +312,138 @@
       justify-self:start;
     }
     #gifConvertBtn:disabled{cursor:wait}
-
-    
-    :root{
-      --text:#eef1fb;--muted:#7f8ba5;--accent:#78aefc;--accent2:#5964f2;
-      --border:rgba(153,174,220,.17);--card:rgba(10,16,29,.78);--selected:#78aefc;
-      --track:rgba(255,255,255,.08);--slider-fill:linear-gradient(90deg,#5964f2,#78aefc);
-    }
-    html{scroll-behavior:smooth}
-    body{
-      display:block;padding:0;overflow-x:hidden;background:#050912;color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background-image:radial-gradient(circle at 70% 10%,rgba(55,88,164,.17),transparent 32%),radial-gradient(circle at 12% 68%,rgba(41,67,134,.11),transparent 30%),linear-gradient(180deg,#060b15,#050912 70%,#07101e);
-    }
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:56px 56px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
-    .site-header{height:72px;border-bottom:1px solid rgba(147,165,205,.14);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,6vw,80px);position:relative;z-index:2;background:rgba(5,9,18,.72);backdrop-filter:blur(16px)}
-    .brand{display:flex;align-items:center;gap:11px;color:#f2f5ff;text-decoration:none;font-weight:700;letter-spacing:-.02em}.brand img{width:38px;height:38px;object-fit:contain;border:1px solid rgba(120,174,252,.28);border-radius:12px;background:#0c1220}.brand span{font-size:1.02rem}
-    nav{display:flex;align-items:center;gap:30px}nav a{color:#748098;text-decoration:none;font-size:.8rem;transition:color .2s}nav a:hover{color:#eaf0ff}.discord-link{padding:11px 18px;border-radius:999px!important;color:#f5f8ff!important;background:linear-gradient(135deg,#78aefc,#5362e8);box-shadow:0 8px 24px rgba(83,98,232,.28)}
-    .app{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:88px 0 32px;display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:34px;align-items:start}.card{border-radius:20px;background:linear-gradient(145deg,rgba(16,25,43,.88),rgba(7,13,24,.78));border:1px solid var(--border);box-shadow:0 25px 80px rgba(0,0,0,.28);cursor:default}.controls,.preview{padding:28px}.controls{position:relative;overflow:visible}.controls:after{content:"";position:absolute;width:220px;height:220px;right:-120px;top:-120px;background:rgba(86,113,237,.14);filter:blur(70px);pointer-events:none}.eyebrow{font-size:.68rem;letter-spacing:.18em;color:#7899ca;font-weight:700;margin-bottom:24px}.eyebrow span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#45d8a2;box-shadow:0 0 12px #45d8a2;margin-right:9px}h1{font-size:clamp(2.45rem,5vw,4rem);line-height:.96;letter-spacing:-.075em;font-weight:300;margin-bottom:22px}h1 em{font-style:normal;color:#74a9fb}.intro{color:#8490a9;font-size:.92rem;line-height:1.7;max-width:390px;margin-bottom:24px}label{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#8b98b1}.field{gap:8px}.card input,.csel-trigger,.slider-wrap,.switch,.progress,.pill{border-radius:12px;background:rgba(255,255,255,.035);border-color:rgba(143,164,205,.16)}input[type="file"],input[type="text"],input[type="number"]{padding:12px 13px;border-radius:10px}.csel-dropdown{border-radius:12px;overflow:hidden;background:#101a2b;border-color:rgba(120,174,252,.38)}.csel-option{padding:12px}.switch{padding:13px 14px}.switch input{accent-color:#6c8df4}.slider-wrap{padding:14px}.slider-val{color:#81b5ff}.row{gap:10px}.row button{border-radius:999px;padding:12px 18px;background:linear-gradient(135deg,#5864ee,#80b0fb);box-shadow:0 10px 22px rgba(82,99,232,.22)}button.secondary{background:rgba(255,255,255,.05);box-shadow:none}.progress{padding:15px}.bar{border-radius:99px}.bar-fill{border-radius:99px}.pill{padding:12px 13px}.sheet-box{min-height:580px;border-radius:14px;background:#070d18;border-color:rgba(143,164,205,.16);box-shadow:inset 0 0 60px rgba(44,78,140,.1)}.site-footer{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:0 0 32px;display:flex;justify-content:space-between;color:#536079;font-size:.72rem;letter-spacing:.04em}.tiny{color:#65738e}
-    @media(max-width:900px){nav a:not(.discord-link){display:none}.app{padding-top:48px;grid-template-columns:1fr}.sheet-box{min-height:320px}.site-footer{padding-top:4px}}
   </style>
 </head>
 <body>
-<header class="site-header">
-  <a class="brand" href="#top" aria-label="LuWare home">
-    <img src="/assets/brand-logo.png" alt="LuWare" />
-    <span>LuWare</span>
-  </a>
-  <nav aria-label="Primary navigation">
-    <a href="#controlsCard">Builder</a>
-    <a href="#previewCard">Preview</a>
-    <a class="discord-link" href="https://discord.com" target="_blank" rel="noreferrer">Join Discord</a>
-  </nav>
-</header>
-<main class="app" id="top">
+<div class="app">
   <section class="card controls" id="controlsCard">
-    <div class="eyebrow"><span></span> OVERDRIVE BACKGROUND MAKER</div>
-    <h1>Build more.<br><em>Wait less.</em></h1>
-    <p class="intro">Create polished sprite sheets from GIFs and videos. Tune your output, preview it instantly, and download everything as a ready-to-use ZIP.</p>
+    <h1>LuWare Background Maker</h1>
+    <p>A background maker for LuWare.</p>
 
     <div class="field">
       <label for="mediaInput">Choose GIF or video</label>
-      <input id="mediaInput" type="file" accept="image/gif,video
+      <input id="mediaInput" type="file" accept="image/gif,video/*">
+    </div>
+
+    <div class="field">
+      <label for="nameInput" id="nameLabel">Name</label>
+      <input id="nameInput" type="text" value="sprite_sheet" placeholder="sprite_sheet">
+    </div>
+
+    <div class="field">
+      <label for="soundInput">Matching AnimBg MP3 (optional)</label>
+      <input id="soundInput" type="file" accept="audio/mpeg,audio/mp3,.mp3">
+      <div class="tiny">The selected file is exported as custom_sounds/animbg/{name}.mp3.</div>
+    </div>
+
+    <!-- Resolution Preset -->
+    <div class="field">
+      <label>Max Sheet Resolution</label>
+      <div class="custom-select" id="resPreset">
+        <div class="csel-trigger" id="resPresetTrigger" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false">
+          <span class="csel-name" id="resPresetName">Balanced</span>
+          <span class="csel-res"  id="resPresetRes">3560×3560</span>
+          <span class="csel-arrow" aria-hidden="true">▾</span>
+        </div>
+        <div class="csel-dropdown" role="listbox" id="resPresetDropdown">
+          <div class="csel-option" data-value="quality"  data-w="5012" data-h="5012" role="option"><span>Prioritize Quality</span><span class="opt-res">5012×5012</span></div>
+          <div class="csel-option selected" data-value="balanced" data-w="3560" data-h="3560" role="option"><span>Balanced</span><span class="opt-res">3560×3560</span></div>
+          <div class="csel-option" data-value="filesize" data-w="2120" data-h="2120" role="option"><span>Prioritize File Size</span><span class="opt-res">2120×2120</span></div>
+          <div class="csel-option" data-value="custom"   data-w="0"    data-h="0"    role="option"><span>Custom</span><span class="opt-res"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom resolution (shown only when Custom is selected) -->
+    <div class="field" id="customResWrap" style="display:none">
+      <label>Custom Max Size</label>
+      <div class="custom-res-row">
+        <input type="number" id="customResW" min="256" max="5012" value="3560" placeholder="Width">
+        <span class="custom-res-x">×</span>
+        <input type="number" id="customResH" min="256" max="5012" value="3560" placeholder="Height">
+      </div>
+    </div>
+
+    <div class="switch">
+      <span><strong>Auto</strong><br><span class="tiny">Automatically adapts configurations to your video.</span></span>
+      <input id="autoToggle" type="checkbox" checked>
+    </div>
+
+    <div class="slider-wrap">
+      <div class="slider-row">
+        <span>FPS</span>
+        <span id="fpsLabel" class="slider-val">24</span>
+      </div>
+      <input id="fpsSlider" type="range" min="5" max="30" value="24">
+    </div>
+
+    <div class="field">
+      <label for="skipInput">Skips per Frames (SPF)</label>
+      <input id="skipInput" type="number" min="1" step="1" value="1">
+    </div>
+
+    <div class="slider-wrap">
+      <div class="slider-row">
+        <span>Resolution (%)</span>
+        <span id="resLabel" class="slider-val">100%</span>
+      </div>
+      <input id="resSlider" type="range" min="0" max="100" value="100">
+    </div>
+
+    <div class="row">
+      <button id="buildBtn" disabled>Generate ZIP</button>
+      <button id="clearBtn" class="secondary" disabled>Clear</button>
+    </div>
+
+    <div class="progress">
+      <div class="progress-head">
+        <div class="progress-title" id="progressTitle">Waiting...</div>
+        <div class="progress-percent" id="progressPercent">0%</div>
+      </div>
+      <div class="bar"><div class="bar-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">This may take from 1-3 minutes to complete.</div>
+    </div>
+
+    <div class="gif-suggestion" id="gifSuggestion">
+      <div class="gif-suggestion-text">Converting to GIF may fix this issue.</div>
+      <button id="gifConvertBtn" disabled>Convert to Gif</button>
+    </div>
+
+    <div class="meta">
+      <div class="pill"><strong id="outFrames">No Data</strong>Total frames</div>
+      <div class="pill"><strong id="outGrid">No Data</strong>Grid</div>
+      <div class="pill"><strong id="outSize">No Data</strong>Sheet size</div>
+      <div class="pill"><strong id="outFrameSize">No Data</strong>Frame size</div>
+    </div>
+  </section>
+
+  <section class="card preview" id="previewCard">
+    <div class="sheet-box">
+      <canvas id="sheetCanvas"></canvas>
+    </div>
+  </section>
+</div>
+
+<script>
+/* =====================================================================
+   LuWare Background Maker  fixed
+   Main fixes vs previous version:
+   - Removed the Web Worker / OffscreenCanvas pipeline (iOS Safari support
+     for OffscreenCanvas + convertToBlob inside a worker is unreliable).
+     All compositing now runs on the main thread using a normal <canvas>,
+     yielding between frames to keep the UI responsive.
+   - Video frame capture now waits for the frame to actually be PAINTED
+     after each seek (requestVideoFrameCallback when available, double-rAF
+     fallback). This was the cause of "fails on some videos"  seeked
+     fires before the new frame is decoded on Safari/Firefox so drawImage
+     captured the previous frame or a blank one.
+   - Removed fastSeek (it jumps to keyframes, producing wrong frames on
+     videos with sparse keyframes).
+   - Draws <video> directly onto the sheet  skips createImageBitmap(video)
+     which is unreliable on Safari for several codecs.
+   - Adds a seek timeout so malformed videos fail clearly instead of hanging.
+   - Caps sheet dimensions to 4096×4096 on iOS (iOS Safari hard canvas limit).
+   ===================================================================== */
 
 const mediaInput    = document.getElementById("mediaInput");
 const nameInput     = document.getElementById("nameInput");
@@ -378,6 +468,7 @@ const outGrid      = document.getElementById("outGrid");
 const outSize      = document.getElementById("outSize");
 const outFrameSize = document.getElementById("outFrameSize");
 
+// GIF conversion suggestion (shown when frames are being skipped)
 const gifSuggestion = document.getElementById("gifSuggestion");
 const gifConvertBtn = document.getElementById("gifConvertBtn");
 
@@ -389,6 +480,7 @@ function hideGifSuggestion() {
   gifConvertBtn.disabled = true;
 }
 
+// Resolution preset
 const resPreset        = document.getElementById("resPreset");
 const resPresetTrigger = document.getElementById("resPresetTrigger");
 const resPresetName    = document.getElementById("resPresetName");
@@ -403,14 +495,17 @@ let currentFile = null;
 let lastProgressValue = 0;
 let currentJson = "";
 
+//  Platform detection 
 const IS_IOS = (() => {
   const ua = navigator.userAgent || "";
   if (/iPad|iPhone|iPod/.test(ua)) return true;
+  // iPadOS 13+ reports as Mac  detect via touch
   if (navigator.platform === "MacIntel" && (navigator.maxTouchPoints || 0) > 1) return true;
   return false;
 })();
 const IOS_MAX_CANVAS = 4096;
 
+//  Resolution preset state 
 let presetValue = "balanced";
 
 function getMaxSheetDimensions() {
@@ -423,6 +518,7 @@ function getMaxSheetDimensions() {
     maxW = parseInt(sel?.dataset.w, 10) || 3560;
     maxH = parseInt(sel?.dataset.h, 10) || 3560;
   }
+  // iOS Safari canvas hard limit
   if (IS_IOS) {
     maxW = Math.min(maxW, IOS_MAX_CANVAS);
     maxH = Math.min(maxH, IOS_MAX_CANVAS);
@@ -472,6 +568,7 @@ customResH.addEventListener("blur", () => clampResInput(customResH));
 customResW.addEventListener("change", () => clampResInput(customResW));
 customResH.addEventListener("change", () => clampResInput(customResH));
 
+//  Name validation 
 const NAME_DEFAULT = "sprite_sheet";
 
 function validateName() {
@@ -609,8 +706,11 @@ function yieldToMain() {
   return new Promise(resolve => setTimeout(resolve, 0));
 }
 
+/* 
+   Video frame extraction (THE big fix)
+    */
 
-
+// Seek with a timeout  some malformed videos hang on seek instead of erroring.
 function seekVideoSafe(video, time) {
   return new Promise((resolve, reject) => {
     let done = false;
@@ -636,20 +736,29 @@ function seekVideoSafe(video, time) {
   });
 }
 
+// Wait for the new frame to actually be PAINTED to the video element.
+// This is the key fix: 'seeked' fires before the frame is decoded on
+// Safari/Firefox, so drawing immediately captures the wrong frame.
 function waitForVideoFramePainted(video) {
   return new Promise(resolve => {
     let resolved = false;
     const finish = () => { if (resolved) return; resolved = true; resolve(); };
     if (typeof video.requestVideoFrameCallback === "function") {
       video.requestVideoFrameCallback(() => finish());
+      // Safety: some browsers won't fire rVFC when paused after seek.
       setTimeout(finish, 250);
     } else {
+      // Double-rAF: one to schedule paint, one to ensure it landed.
       requestAnimationFrame(() => requestAnimationFrame(finish));
+      // Safety: rAF doesn't fire in backgrounded tabs.
       setTimeout(finish, 500);
     }
   });
 }
 
+// PNG encode with dataURL fallback. iOS Safari sometimes returns null from
+// toBlob() on huge canvases, but toDataURL() may still work. Last resort:
+// fail with a clear message rather than hang or output a broken zip.
 function canvasToBlobSafe(canvas, mime) {
   const type = mime || "image/png";
   return new Promise((resolve, reject) => {
@@ -658,6 +767,8 @@ function canvasToBlobSafe(canvas, mime) {
     const fail = (e) => { if (!settled) { settled = true; reject(e); } };
     const sizeMsg = canvas.width + "x" + canvas.height;
 
+    // Safety timeout  toBlob has been known to never call back on iOS
+    // when the canvas exceeds the device memory limit.
     const to = setTimeout(() => {
       fail(new Error("PNG encoding timed out at " + sizeMsg + ". Try a smaller resolution preset."));
     }, 60000);
@@ -665,6 +776,7 @@ function canvasToBlobSafe(canvas, mime) {
     try {
       canvas.toBlob((blob) => {
         if (blob) { clearTimeout(to); ok(blob); return; }
+        // toBlob returned null  try the dataURL path.
         try {
           const dataURL = canvas.toDataURL(type);
           if (!dataURL || dataURL === "data:,") {
@@ -692,15 +804,18 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
   video.playsInline = true;
   video.setAttribute("playsinline", "");
   video.setAttribute("webkit-playsinline", "");
+  // crossOrigin not set  we're using blob: URLs, not cross-origin URLs.
 
   const url = URL.createObjectURL(file);
   video.src = url;
 
+  // Some browsers (Safari) need a kick to start decoding.
   try { video.load(); } catch (_) {}
 
   try {
     await waitForEvent(video, "loadedmetadata", 15000);
     if (video.readyState < 2) {
+      // wait until we have at least current-data
       await waitForEvent(video, "loadeddata", 15000);
     }
 
@@ -729,6 +844,9 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
     let skipped         = 0;
     let consecutiveFails = 0;
 
+    // Small offscreen canvas holding the most recent successfully captured
+    // frame. If a later seek fails we draw this into the slot so the
+    // animation gets a tiny stutter instead of a blank gap.
     const lastGood    = document.createElement("canvas");
     lastGood.width    = plan.frameWidth;
     lastGood.height   = plan.frameHeight;
@@ -737,6 +855,7 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
     lastGoodCtx.imageSmoothingQuality = "high";
     let haveLastGood  = false;
 
+    // Try a seek+wait+draw to the lastGood canvas. Returns true on success.
     async function tryGrab(time) {
       try {
         await seekVideoSafe(video, time);
@@ -752,6 +871,8 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
     for (let srcIndex = 0; srcIndex < sourceCount; srcIndex += stride) {
       const time = Math.max(0, Math.min(duration - 0.001, srcIndex / captureFps));
 
+      // Update progress on EVERY frame so a slow seek doesn't make the UI
+      // look frozen for 8+ seconds at a time.
       {
         const skipNote = skipped > 0 ? " (" + skipped + " skipped)" : "";
         onProgress(
@@ -761,6 +882,9 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
         );
       }
 
+      // Try the exact time, then one small nudge forward. Buggy or poorly-
+      // keyframed videos often fail at one specific moment but succeed a
+      // few ms away. Capping at 2 attempts keeps per-frame cost <= ~4s.
       let ok = await tryGrab(time);
       if (!ok) {
         const nudgeFwd = Math.min(duration - 0.001, time + 0.04);
@@ -776,6 +900,8 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
           haveLastGood = true;
           consecutiveFails = 0;
         } catch (drawErr) {
+          // drawing the small lastGood onto sheet should never fail, but
+          // if the sheet itself is corrupt count this as a skip.
           skipped++;
           consecutiveFails++;
           showGifSuggestion();
@@ -785,18 +911,26 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
         consecutiveFails++;
         showGifSuggestion();
         if (haveLastGood) {
+          // Reuse most recent successful frame so the animation doesn't gap.
           try { sctx.drawImage(lastGood, x, y); } catch (_) {}
         }
+        // else: very first frame failed  leave the slot transparent.
       }
 
       selectedIndex++;
 
+      // Safety A: bail if 3 frames in a row fail. This is the real
+      // "hang" guard  without it a broken video can waste minutes
+      // burning through seek timeouts back to back. With a 2s timeout
+      // and 2 attempts per frame, this caps the bad-video wait at ~24s.
       if (consecutiveFails >= 3) {
         throw new Error(
           "An error occured while transforming your video, this issue can be saved by converting your video into gif."
         );
       }
 
+      // Safety B: if it's clearly not working overall, bail instead of
+      // spinning through hundreds of failed seeks.
       if (selectedIndex >= 10 && skipped > selectedIndex * 0.6) {
         throw new Error(
           "Too many frame failures (" + skipped + "/" + selectedIndex + "). " +
@@ -804,6 +938,7 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
         );
       }
 
+      // Yield every few frames to keep the UI responsive.
       if ((selectedIndex & 1) === 0) await yieldToMain();
     }
 
@@ -825,7 +960,12 @@ async function captureAndCompositeVideo(file, skip, captureFps, sourceCount, pla
   }
 }
 
-
+/* 
+   Playback-based extraction (the "Convert to GIF" fallback)
+   Plays the video and captures frames as they're presented via
+   requestVideoFrameCallback. Bypasses seeking entirely  slower
+   on long clips, but works on videos where seeking is unreliable.
+    */
 
 async function captureByPlayback(file, skip, captureFps, sourceCount, plan, onProgress) {
   const video = document.createElement("video");
@@ -857,6 +997,7 @@ async function captureByPlayback(file, skip, captureFps, sourceCount, plan, onPr
     const stride = Math.max(1, skip);
     const total  = Math.max(1, Math.ceil(sourceCount / stride));
 
+    // Pre-compute the target timestamps we want to capture.
     const targets = [];
     for (let i = 0; i < total; i++) {
       const t = Math.max(0, Math.min(duration - 0.001, (i * stride) / captureFps));
@@ -892,6 +1033,8 @@ async function captureByPlayback(file, skip, captureFps, sourceCount, plan, onPr
       const finish = () => { if (settled) return; settled = true; clearTimeout(watchdog); try { video.pause(); } catch (_) {} resolve(); };
       const fail   = (e) => { if (settled) return; settled = true; clearTimeout(watchdog); try { video.pause(); } catch (_) {} reject(e); };
 
+      // Watchdog: if playback time hasn't advanced in 6s, assume stall.
+      // Generous total budget: at least 30s, or 3x duration, whichever is more.
       const totalBudgetMs = Math.max(30000, Math.ceil(duration * 3000));
       const watchdog = setTimeout(function tick() {
         if (settled) return;
@@ -925,6 +1068,8 @@ async function captureByPlayback(file, skip, captureFps, sourceCount, plan, onPr
         const mt = meta.mediaTime;
         if (mt !== lastProgressMt) { lastProgressMt = mt; lastProgressAt = Date.now(); }
 
+        // Capture every target we've reached. (More than one may pass
+        // between rVFC callbacks if framerates differ.)
         while (nextIdx < targets.length && mt >= targets[nextIdx] - 0.005) {
           if (captureSlot(nextIdx)) {
             captured++;
@@ -953,6 +1098,8 @@ async function captureByPlayback(file, skip, captureFps, sourceCount, plan, onPr
       };
 
       video.addEventListener("ended", () => {
+        // Video ended before we hit every target  fill the rest with the
+        // last good frame so the animation doesn't have transparent gaps.
         while (nextIdx < targets.length) {
           if (haveLastGood) {
             const x = (nextIdx % plan.columns) * plan.frameWidth;
@@ -986,7 +1133,9 @@ async function captureByPlayback(file, skip, captureFps, sourceCount, plan, onPr
   }
 }
 
-
+/* 
+   GIF decoding (main thread, ImageDecoder)
+    */
 
 async function decodeGifMainThread(file, skip, plan, sourceMeta, onProgress) {
   if (!("ImageDecoder" in window)) {
@@ -1014,6 +1163,7 @@ async function decodeGifMainThread(file, skip, plan, sourceMeta, onProgress) {
   let skipped  = 0;
   let haveLastGood = false;
 
+  // Temporary canvas holding the most recent successfully decoded frame.
   const lastGood    = document.createElement("canvas");
   lastGood.width    = plan.frameWidth;
   lastGood.height   = plan.frameHeight;
@@ -1032,6 +1182,7 @@ async function decodeGifMainThread(file, skip, plan, sourceMeta, onProgress) {
       if (decoded.image && decoded.image.close) decoded.image.close();
       ok = true;
     } catch (_) {
+      // Corrupted GIF frame  fall through to reuse-last-good path.
     }
 
     const x = (si % plan.columns) * plan.frameWidth;
@@ -1067,7 +1218,9 @@ async function decodeGifMainThread(file, skip, plan, sourceMeta, onProgress) {
   return { pngBlob, selectedCount: si, skipped, sheetCanvas: sheet };
 }
 
-
+/* 
+   Metadata readers
+    */
 
 async function readGifInfo(file) {
   if ("ImageDecoder" in window) {
@@ -1087,9 +1240,10 @@ async function readGifInfo(file) {
       }
       decoder.close();
       if (width && height) return { width, height, frameCount };
-    } catch (e) {  }
+    } catch (e) { /* fall through */ }
   }
 
+  // Fallback: use <img> for dimensions, scan bytes for frame count.
   const url = URL.createObjectURL(file);
   const img = await new Promise((resolve, reject) => {
     const i = new Image();
@@ -1145,7 +1299,9 @@ async function readSourceMeta(file, captureFps) {
   return isGif ? readGifInfo(file) : readVideoInfo(file, captureFps);
 }
 
-
+/* 
+   Output helpers
+    */
 
 function buildJson(frameWidth, frameHeight, columns, rows, totalFrames, frameRate) {
   return {
@@ -1179,7 +1335,9 @@ function applyAutoState() {
   updateLabels();
 }
 
-
+/* 
+   Main build pipeline
+    */
 
 async function buildZip(opts) {
   opts = opts || {};
@@ -1286,8 +1444,11 @@ async function buildZip(opts) {
   }
   const pngBlob = result.pngBlob;
 
+  // Preview
   canvas.width  = plan.frameWidth  * plan.columns;
   canvas.height = plan.frameHeight * plan.rows;
+  // Draw the assembled sheet straight onto the preview canvas  fast and
+  // avoids waiting for an Image to decode the PNG we just made.
   if (result.sheetCanvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(result.sheetCanvas, 0, 0);
@@ -1312,10 +1473,8 @@ async function buildZip(opts) {
   const zip = new JSZip();
   zip.file(baseName + ".json", currentJson);
   zip.file(baseName + ".png",  pngBlob);
+  // Custom sounds are only used for AnimBg.
   zip.file("custom_sounds/animbg/.keep", "");
-  zip.file("custom_sounds/hitmarker/gunshot/.keep", "");
-  zip.file("custom_sounds/hitmarker/kill/.keep", "");
-  zip.file("custom_sounds/hitmarker/reload/.keep", "");
   if (currentSoundFile) {
     const soundBuffer = await currentSoundFile.arrayBuffer();
     zip.file("custom_sounds/animbg/" + baseName + ".mp3", soundBuffer);
@@ -1340,7 +1499,9 @@ async function buildZip(opts) {
     "Exported: " + baseName + ".png, " + baseName + ".json, and " + baseName + ".zip" + (currentSoundFile ? " with custom_sounds/animbg/" + baseName + ".mp3." : ".") + skippedNote);
 }
 
-
+/* 
+   Event wiring
+    */
 
 const allCards = document.querySelectorAll(".card");
 allCards.forEach(card => {
@@ -1395,6 +1556,8 @@ autoToggle.addEventListener("change", () => {
   );
 });
 
+// Helper that runs a build with the given options and manages the buttons /
+// suggestion-box state. Used by both "Generate ZIP" and "Convert to GIF".
 async function runBuild(opts) {
   if (!currentFile) return;
   buildBtn.disabled = true;
@@ -1407,6 +1570,8 @@ async function runBuild(opts) {
     setProgress(0, "Error", (err && err.message) ? err.message : "Something went wrong.");
   } finally {
     buildBtn.disabled = !currentFile;
+    // Only re-enable the Convert button if the suggestion is still on screen
+    // (i.e., some frames were skipped during this run).
     if (gifSuggestion.classList.contains("visible")) {
       gifConvertBtn.disabled = false;
     }
