@@ -353,12 +353,35 @@
     button.secondary{border-color:rgba(143,164,205,.2);color:#cbd6ea}
     .sheet-box{background:#070d18;border-color:rgba(120,174,252,.18);box-shadow:inset 0 0 60px rgba(89,100,242,.06)}
     .site-footer{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:0 0 30px;text-align:center}.site-footer .tiny{color:#58667e;letter-spacing:.04em}
+
+    /* Keep the branded shell stable at narrow preview widths. */
+    .brand:before{display:none}
+    .brand img{display:block;width:34px;height:34px;flex:0 0 34px;border:0;border-radius:10px;background:transparent;object-fit:contain}
+    .app{min-width:0}
+    .controls,.preview{min-width:0}
+    .sheet-box{width:100%;min-width:0}
+    @media(max-width:900px){
+      .site-header{height:auto;min-height:72px;padding-block:16px;gap:16px}
+      nav{gap:10px}
+      .app{width:min(100% - 28px,620px);padding-top:28px;gap:18px}
+      .controls,.preview{padding:20px}
+      h1{font-size:clamp(2.45rem,12vw,3.6rem)}
+    }
+    @media(max-width:480px){
+      .site-header{padding-inline:14px}
+      nav a:not(.discord-link){display:none}
+      .discord-link{padding:10px 14px!important;font-size:.72rem!important}
+      .app{width:calc(100% - 20px);padding-top:20px}
+      .controls,.preview{padding:17px}
+      .row button{width:100%}
+      .meta{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
 <header class="site-header">
   <a class="brand" href="#top" aria-label="LuWare home">
-    <img src="/assets/brand-logo.png" alt="LuWare" />
+    <img src="https://luware.filho.wtf/assets/brand-logo.png" alt="LuWare" />
     <span>LuWare</span>
   </a>
   <nav aria-label="Primary navigation">
