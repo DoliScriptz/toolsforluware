@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LuWare Plugin Documentation</title>
+<meta name="description" content="LuWare plugin API documentation, examples, elements, callbacks and shared_info reference.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080d;
+  --panel:#0d0f17;
+  --panel-2:#11141e;
+  --panel-3:#151927;
+  --text:#eef2ff;
+  --muted:#8f97aa;
+  --faint:#616879;
+  --border:rgba(255,255,255,.08);
+  --accent:#7c3aed;
+  --accent-2:#6ea8fe;
+  --accent-soft:rgba(124,58,237,.13);
+  --blue-soft:rgba(110,168,254,.10);
+  --green:#65d79a;
+  --danger:#ff6d7a;
+  --radius:12px;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font:"Jura",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(900px 450px at 70% -10%,rgba(124,58,237,.14),transparent 65%),var(--bg);color:var(--text);font-family:var(--font);font-weight:500;line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid var(--border);background:rgba(7,8,13,.88);backdrop-filter:blur(16px);padding:24px 16px;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:11px;padding:8px 10px 22px}
+.brand-mark{width:34px;height:34px;border:1px solid rgba(124,58,237,.55);background:linear-gradient(135deg,rgba(124,58,237,.28),rgba(110,168,254,.10));display:grid;place-items:center;border-radius:9px;font-weight:700}
+.brand strong{font-size:1.08rem;letter-spacing:.04em}
+.brand span{display:block;color:var(--muted);font-size:.75rem;margin-top:-2px}
+.nav{display:grid;gap:4px;overflow:auto;padding-right:3px}
+.nav a{padding:9px 11px;border:1px solid transparent;border-radius:8px;color:var(--muted);font-size:.9rem;transition:.16s ease}
+.nav a:hover{color:var(--text);background:rgba(255,255,255,.025);border-color:var(--border)}
+.nav a.active{color:var(--text);background:var(--accent-soft);border-color:rgba(124,58,237,.28)}
+.nav-label{text-transform:uppercase;letter-spacing:.12em;color:var(--faint);font-size:.68rem;margin:16px 11px 6px}
+.sidebar-foot{margin-top:auto;padding:14px 10px 0;color:var(--faint);font-size:.72rem}
+.main{min-width:0;max-width:100%;overflow-x:hidden}
+.content,.section,.card,.two,.grid,.element-list{min-width:0;max-width:100%}
+.topbar{position:sticky;top:0;z-index:10;height:64px;border-bottom:1px solid var(--border);background:rgba(7,8,13,.70);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:0 34px}
+.topbar .crumb{font-size:.8rem;color:var(--muted)}
+.topbar .version{padding:5px 9px;border:1px solid var(--border);background:rgba(255,255,255,.025);border-radius:999px;font-size:.68rem;letter-spacing:.08em;color:#cdd3e1}
+.mobile-nav{display:none}
+.content{max-width:1050px;margin:0 auto;padding:72px 48px 110px;min-width:0}
+.hero{padding:10px 0 54px;max-width:900px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#c9b6ff;background:var(--accent-soft);border:1px solid rgba(124,58,237,.25);padding:6px 10px;border-radius:999px;font-size:.75rem;letter-spacing:.07em;text-transform:uppercase}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 16px rgba(110,168,254,.65)}
+h1{font-size:clamp(2.8rem,7vw,5.6rem);line-height:.96;letter-spacing:-.045em;margin:21px 0 21px;font-weight:600}
+h1 .grad{background:linear-gradient(110deg,#fff 0%,#d8dfff 43%,#9bbcff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:690px;font-size:1.05rem;color:var(--muted);margin:0}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.btn{border:1px solid var(--border);background:rgba(255,255,255,.035);color:var(--text);border-radius:9px;padding:10px 14px;cursor:pointer;transition:.16s ease;font-size:.85rem}
+.btn:hover{border-color:rgba(124,58,237,.42);background:var(--accent-soft)}
+.btn.primary{border-color:rgba(124,58,237,.42);background:linear-gradient(135deg,rgba(124,58,237,.27),rgba(110,168,254,.10))}
+.section{scroll-margin-top:92px;padding:42px 0;border-top:1px solid var(--border);min-width:0;max-width:100%}
+.section:first-of-type{border-top:0}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px;min-width:0}
+.section h2{font-size:1.75rem;letter-spacing:-.025em;margin:0;font-weight:600}
+.section-head p{margin:0;color:var(--muted);max-width:580px;font-size:.9rem}
+h3{font-size:1.15rem;margin:28px 0 10px}
+p{color:var(--muted);font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.018));border:1px solid var(--border);border-radius:var(--radius);padding:20px;min-width:0;max-width:100%;overflow:hidden}
+.card > .table-wrap + .notice{margin-top:14px}
+.card > .notice + .code-wrap{margin-top:18px}
+.card strong{font-size:.95rem}
+.card p{margin:10px 0 0}
+.card > .pill + h3{margin-top:12px}
+.external-link-row{margin:16px 0 2px!important}
+.external-link{display:inline-flex;align-items:center;gap:6px}
+.element-list{display:grid;gap:22px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;color:#b9c0ce;font-size:.7rem;background:rgba(255,255,255,.02)}
+.pill code{font-family:var(--mono);color:#dce4ff}
+.code-wrap{position:relative;margin:18px 0 0;max-width:100%;min-width:0;overflow:hidden}
+.copy{position:absolute;right:11px;top:11px;padding:6px 9px;border:1px solid var(--border);background:rgba(7,8,13,.75);color:#bfc7d8;border-radius:7px;cursor:pointer;font-size:.68rem;z-index:1}
+.copy:hover{color:#fff;border-color:rgba(124,58,237,.45)}
+.code-wrap pre{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;border:1px solid var(--border);border-radius:11px;background:#090b11;padding:19px 18px;color:#dce5ff;font:400 .78rem/1.7 var(--mono)}
+.code-comment{color:#697286}.code-key{color:#cba7ff}.code-str{color:#a9dbff}.code-fn{color:#98e7c1}.code-num{color:#f0c890}
+.notice{margin-top:16px;border:1px solid rgba(110,168,254,.20);background:linear-gradient(180deg,var(--blue-soft),rgba(255,255,255,.015));border-radius:10px;padding:13px 15px;color:#bdc8da;font-size:.82rem;overflow-wrap:anywhere;word-break:break-word}
+.notice b{color:#e5ecff;display:inline-block;margin-right:7px}
+.table-wrap{margin-top:16px;overflow-x:auto;overflow-y:hidden;border:1px solid var(--border);border-radius:11px;max-width:100%;min-width:0;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.42) transparent}
+.table-wrap::-webkit-scrollbar{height:8px}
+.table-wrap::-webkit-scrollbar-track{background:rgba(255,255,255,.025);border-radius:999px}
+.table-wrap::-webkit-scrollbar-thumb{background:rgba(124,58,237,.38);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+.table-wrap::-webkit-scrollbar-thumb:hover{background:rgba(124,58,237,.58);background-clip:padding-box}
+table{width:100%;min-width:760px;border-collapse:collapse;table-layout:fixed;background:rgba(255,255,255,.012)}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border);font-size:.79rem;vertical-align:top;overflow-wrap:anywhere;word-break:break-word}
+th{color:#dce2ef;font-weight:600;background:rgba(255,255,255,.025)}
+td{color:var(--muted)}
+td code,li code,p code{font-family:var(--mono);font-size:.72rem;color:#dbe4ff;background:rgba(255,255,255,.04);padding:2px 5px;border-radius:4px;overflow-wrap:anywhere;word-break:break-word}
+.element-card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px}
+.element-card .tag{font-family:var(--mono);font-size:.76rem;color:#b99cff;word-break:break-word}
+.table-wrap th:nth-child(1),.table-wrap td:nth-child(1){width:20%}
+.table-wrap th:nth-child(2),.table-wrap td:nth-child(2){width:19%}
+.table-wrap th:nth-child(3),.table-wrap td:nth-child(3){width:61%}
+.list{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:.86rem}
+.list li{margin:6px 0}
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:start;min-width:0}.two>*,.grid>*, .element-list>*{min-width:0;max-width:100%}
+.api-flow{display:grid;gap:9px;margin-top:13px}
+.api-step{display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--border);background:rgba(255,255,255,.02);border-radius:9px}
+.api-step b{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:.72rem;background:var(--accent-soft);color:#cebfff;border:1px solid rgba(124,58,237,.24)}
+.callout{border-left:2px solid var(--accent);padding:4px 0 4px 15px;color:#bfc6d5;font-size:.86rem}
+.footer{margin-top:62px;border-top:1px solid var(--border);padding-top:22px;color:var(--faint);font-size:.72rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:860px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .mobile-nav{display:flex}
+  .topbar{padding:0 18px;gap:12px}
+  .content{padding:48px 20px 80px}
+  .grid,.two{grid-template-columns:1fr}
+  .table-wrap{overflow-x:auto}
+  table{min-width:700px;table-layout:fixed}
+  th,td{padding:10px 10px;font-size:.76rem}
+}
+@media (max-width:580px){
+  h1{font-size:3rem}
+  .element-list{gap:18px}
+  .section-head{display:block}
+  .section-head p{margin-top:7px}
+  .element-card{grid-template-columns:1fr}
+  .table-wrap{margin-top:14px}
+  table{min-width:620px}
+  th,td{padding:9px 8px;font-size:.74rem}
+  .notice{margin-top:12px;padding:12px 13px}
+  .notice b{margin-right:5px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">L</div>
+      <div><strong>LuWare</strong><span>Plugin Documentation</span></div>
+    </div>
+    <div class="nav-label">Guide</div>
+    <nav class="nav" id="sideNav">
+      <a href="#getting-started" class="active">Getting Started</a>
+      <a href="#shared-info">shared_info</a>
+      <a href="#tabs-groups">Tabs & Groupboxes</a>
+      <a href="#elements">UI Elements</a>
+      <a href="#callbacks">Callbacks</a>
+      <a href="#plugin-api">Plugin API</a>
+      <a href="#security">Plugin Environment</a>
+      <a href="#examples">Examples</a>
+    </nav>
+    <div class="sidebar-foot">Designed around the LuWare visual language.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="crumb">LuWare / Plugins</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="mobile-nav"><button class="btn" id="menuBtn" type="button">Sections</button></div>
+        <div class="version">PLUGIN API</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="hero" id="getting-started">
+        <div class="eyebrow"><i></i> LuWare plugin system</div>
+        <h1>Build plugins.<br><span class="grad">Keep it simple.</span></h1>
+        <p>Extend LuWare with your own tabs, groupboxes, controls, callbacks and notifications through the safe <code>shared_info</code> interface.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#examples">View Example</a>
+          <a class="btn" href="#plugin-api">Browse API</a>
+        </div>
+      </section>
+
+      <section class="section" id="shared-info">
+        <div class="section-head">
+          <div><h2>The <code>shared_info</code> table</h2></div>
+          <p>This is the public surface exposed to a plugin. Build plugins through this documented table and the handles returned by its functions.</p>
+        </div>
+        <div class="notice"><b>Core idea:</b> Plugins receive the documented functions for tabs, groupboxes, controls and utility features.</div>
+        <div class="grid" style="margin-top:14px">
+          <div class="card"><span class="pill">Game</span><p><code>shared_info.Game</code> identifies the current supported game. Read it; do not overwrite it.</p></div>
+          <div class="card"><span class="pill">UI</span><p><code>AddTab</code>, <code>AddGroupbox</code> and the element helpers create plugin UI through the documented API.</p></div>
+          <div class="card"><span class="pill">Utility</span><p><code>Notify</code> displays a LuWare notification, while <code>Kick</code> routes through the LuWare error UI.</p></div>
+          <div class="card"><span class="pill">Handles</span><p>Controls return safe handles with methods such as <code>GetValue</code>, <code>SetValue</code>, <code>OnChanged</code> and <code>RunChanged</code>.</p></div>
+        </div>
+        <h3>Typical entry check</h3>
+        <div class="code-wrap">
+          <button class="copy" data-copy="example-game">Copy</button>
+          <pre id="example-game"><span class="code-key">if</span> shared_info.Game ~= <span class="code-str">"Murder Mystery 2"</span> <span class="code-key">then</span>
+    <span class="code-key">return</span>
+<span class="code-key">end</span></pre>
+        </div>
+      </section>
+
+      <section class="section" id="tabs-groups">
+        <div class="section-head"><div><h2>Tabs & groupboxes</h2></div><p>Create a dedicated area for your plugin and split controls between the left and right sides.</p></div>
+        <div class="two">
+          <div class="card">
+            <div class="pill">1 · Add a tab</div>
+            <p><code>shared_info.AddTab(name, icon)</code> creates your plugin tab. The second argument is the <strong>Lucide icon name</strong>; use a Lucide icon name such as <code>sparkles</code>, <code>settings</code>, or <code>puzzle</code>.</p>
+            <p class="external-link-row"><a class="btn primary external-link" href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer">Browse Lucide icons ↗</a></p>
+            <div class="code-wrap"><button class="copy" data-copy="tab-code">Copy</button><pre id="tab-code">local tab = shared_info.AddTab(<span class="code-str">"My Plugin"</span>, <span class="code-str">"sparkles"</span>)</pre></div>
+            <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+              <tr><td><code>name</code></td><td>string</td><td>The text shown for your plugin tab.</td></tr>
+              <tr><td><code>icon</code></td><td>string</td><td>A Lucide icon name used for the tab icon. The value should be the icon's name, not an image URL or custom asset.</td></tr>
+            </tbody></table></div>
+            <div class="pill" style="margin-top:14px">2 · Add a groupbox</div>
+            <div class="code-wrap"><button class="copy" data-copy="group-code">Copy</button><pre id="group-code">local group = shared_info.AddGroupbox(tab, <span class="code-str">"Main"</span>, <span class="code-str">"Left"</span>)
+local right = shared_info.AddGroupbox(tab, <span class="code-str">"Extras"</span>, <span class="code-str">"Right"</span>)</pre></div>
+          </div>
+          <div class="card">
+            <strong>Convenience form</strong>
+            <p>The tab handle also supports <code>tab:AddGroupbox(name, side)</code> in the documented API.</p>
+            <div class="api-flow">
+              <div class="api-step"><b>1</b><span>Create a plugin tab</span></div>
+              <div class="api-step"><b>2</b><span>Create one or more groupboxes</span></div>
+              <div class="api-step"><b>3</b><span>Add elements to each groupbox</span></div>
+              <div class="api-step"><b>4</b><span>Attach callbacks to react to changes</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="elements">
+        <div class="section-head"><div><h2>UI elements</h2></div><p>Every element available through <code>shared_info</code>, with the arguments you can configure and a working example for each one.</p></div>
+
+        <div class="element-list">
+        <div class="card">
+          <div class="pill">AddLabel</div>
+          <h3>Label</h3>
+          <p>Shows text in a groupbox. The returned handle lets you update the text later.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>text</code></td><td>string</td><td>Text displayed by the label.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="label-example">Copy</button><pre id="label-example"><span class="code-key">local</span> label = shared_info.AddLabel(group, <span class="code-str">"Waiting..."</span>)
+label:SetText(<span class="code-str">"Ready!"</span>)</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">AddToggle</div>
+          <h3>Toggle</h3>
+          <p>Stores a true/false value and runs its callback whenever the value changes.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Text</code></td><td>string</td><td>Label shown next to the toggle.</td></tr>
+            <tr><td><code>Default</code></td><td>boolean</td><td>Initial state.</td></tr>
+            <tr><td><code>Callback</code></td><td>function(value)</td><td>Runs when the toggle value changes.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="toggle-example">Copy</button><pre id="toggle-example"><span class="code-key">local</span> enabled = shared_info.AddToggle(group, <span class="code-str">"Enabled"</span>, {
+    Default = <span class="code-key">true</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Enabled:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+enabled:SetValue(<span class="code-key">false</span>)
+<span class="code-key">local</span> current = enabled:GetValue()
+print(current)
+enabled:OnChanged(<span class="code-key">function</span>(value)
+    print(<span class="code-str">"Changed:"</span>, value)
+<span class="code-key">end</span>)</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">AddButton</div>
+          <h3>Button</h3>
+          <p>Runs an action when the button is pressed.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Callback</code></td><td>function()</td><td>Runs when the button is clicked.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="button-example">Copy</button><pre id="button-example">shared_info.AddButton(group, <span class="code-str">"Say Hello"</span>, {
+    Callback = <span class="code-key">function</span>()
+        shared_info.Notify(<span class="code-str">"Hello from my plugin!"</span>, <span class="code-num">2</span>)
+    <span class="code-key">end</span>,
+})</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">AddSlider</div>
+          <h3>Slider</h3>
+          <p>Stores a number between <code>Min</code> and <code>Max</code>. Prefixes render before the value and suffixes render after it.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Text</code></td><td>string</td><td>Label shown above the slider.</td></tr>
+            <tr><td><code>Default</code></td><td>number</td><td>Initial slider value.</td></tr>
+            <tr><td><code>Min</code></td><td>number</td><td>Lowest allowed value.</td></tr>
+            <tr><td><code>Max</code></td><td>number</td><td>Highest allowed value.</td></tr>
+            <tr><td><code>Rounding</code></td><td>number</td><td>Decimal precision used by the control.</td></tr>
+            <tr><td><code>Prefix</code></td><td>string</td><td>Text placed before the number, such as <code>$</code>.</td></tr>
+            <tr><td><code>Suffix</code></td><td>string</td><td>Text placed after the number, such as <code>%</code> or <code>s</code>.</td></tr>
+            <tr><td><code>Callback</code></td><td>function(value)</td><td>Runs when the slider value changes.</td></tr>
+          </tbody></table></div>
+          <div class="notice"><b>Formatting:</b> <code>Prefix = "$"</code> gives <code>$50</code>. <code>Suffix = "%"</code> gives <code>50%</code>. <code>Suffix = "s"</code> gives <code>5s</code>.</div>
+          <div class="code-wrap"><button class="copy" data-copy="slider-example">Copy</button><pre id="slider-example"><span class="code-key">local</span> speed = shared_info.AddSlider(group, <span class="code-str">"Speed"</span>, {
+    Default = <span class="code-num">50</span>,
+    Min = <span class="code-num">0</span>,
+    Max = <span class="code-num">100</span>,
+    Rounding = <span class="code-num">0</span>,
+    Suffix = <span class="code-str">"%"</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Speed:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+speed:SetValue(<span class="code-num">75</span>)
+<span class="code-key">local</span> current = speed:GetValue()
+print(current)
+speed:OnChanged(<span class="code-key">function</span>(value)
+    print(<span class="code-str">"Changed:"</span>, value)
+<span class="code-key">end</span>)</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">AddInput</div>
+          <h3>Input</h3>
+          <p>Creates a text field. Set <code>Numeric</code> to true for numeric entry.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Text</code></td><td>string</td><td>Label shown for the input.</td></tr>
+            <tr><td><code>Default</code></td><td>string</td><td>Initial text.</td></tr>
+            <tr><td><code>Placeholder</code></td><td>string</td><td>Hint displayed while empty.</td></tr>
+            <tr><td><code>Numeric</code></td><td>boolean</td><td>Limits the field to numeric input.</td></tr>
+            <tr><td><code>Finished</code></td><td>boolean</td><td>Controls whether the callback waits for editing to finish.</td></tr>
+            <tr><td><code>ClearTextOnFocus</code></td><td>boolean</td><td>Clears the current text when focused.</td></tr>
+            <tr><td><code>Callback</code></td><td>function(value)</td><td>Runs when the input value is committed.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="input-example">Copy</button><pre id="input-example"><span class="code-key">local</span> name = shared_info.AddInput(group, <span class="code-str">"Name"</span>, {
+    Default = <span class="code-str">"LuWare"</span>,
+    Placeholder = <span class="code-str">"Type your name..."</span>,
+    Numeric = <span class="code-key">false</span>,
+    Finished = <span class="code-key">true</span>,
+    ClearTextOnFocus = <span class="code-key">false</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Name:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+name:SetValue(<span class="code-str">"Xynnn"</span>)
+print(name:GetValue())
+name:OnChanged(<span class="code-key">function</span>(value)
+    print(<span class="code-str">"Changed:"</span>, value)
+<span class="code-key">end</span>)</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">AddKeybind</div>
+          <h3>Keybind</h3>
+          <p>Creates a key picker for assigning a key to a plugin action.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Default</code></td><td>key value</td><td>Initial key assigned to the picker.</td></tr>
+            <tr><td><code>Mode</code></td><td>string</td><td>Keybind behavior mode, such as <code>Press</code>.</td></tr>
+            <tr><td><code>NoUI</code></td><td>boolean</td><td>Controls whether the keybind is shown in the LuWare keybind display.</td></tr>
+            <tr><td><code>Callback</code></td><td>function(value)</td><td>Runs when the keybind value changes.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="keybind-example">Copy</button><pre id="keybind-example"><span class="code-key">local</span> key = shared_info.AddKeybind(group, <span class="code-str">"Action Key"</span>, {
+    Default = <span class="code-str">"P"</span>,
+    Mode = <span class="code-str">"Press"</span>,
+    NoUI = <span class="code-key">false</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Key:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+key:SetValue(<span class="code-str">"K"</span>)
+print(key:GetValue())
+key:OnChanged(<span class="code-key">function</span>(value)
+    print(<span class="code-str">"Changed:"</span>, value)
+<span class="code-key">end</span>)</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">AddColorpicker</div>
+          <h3>Colorpicker</h3>
+          <p>Lets the user choose a <code>Color3</code> value.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Default</code></td><td>Color3</td><td>Initial color.</td></tr>
+            <tr><td><code>Callback</code></td><td>function(color)</td><td>Runs when the selected color changes.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="color-example">Copy</button><pre id="color-example"><span class="code-key">local</span> accent = shared_info.AddColorpicker(group, <span class="code-str">"Accent"</span>, {
+    Default = Color3.fromRGB(<span class="code-num">110</span>, <span class="code-num">80</span>, <span class="code-num">255</span>),
+    Callback = <span class="code-key">function</span>(color)
+        print(<span class="code-str">"Color:"</span>, color)
+    <span class="code-key">end</span>,
+})
+
+accent:SetValue(Color3.fromRGB(<span class="code-num">255</span>, <span class="code-num">80</span>, <span class="code-num">80</span>))
+print(accent:GetValue())
+accent:OnChanged(<span class="code-key">function</span>(color)
+    print(<span class="code-str">"Changed:"</span>, color)
+<span class="code-key">end</span>)</pre></div>
+        </div>
+
+        <div class="card">
+          <div class="pill">Notify</div>
+          <h3>Notification</h3>
+          <p>Displays a LuWare notification. You can use a config table or the shorter text + duration form.</p>
+          <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Type</th><th>What it does</th></tr></thead><tbody>
+            <tr><td><code>Title</code></td><td>string</td><td>Notification title.</td></tr>
+            <tr><td><code>Description</code></td><td>string</td><td>Main notification text.</td></tr>
+            <tr><td><code>Time</code></td><td>number</td><td>How long the notification remains visible.</td></tr>
+          </tbody></table></div>
+          <div class="code-wrap"><button class="copy" data-copy="notify-example">Copy</button><pre id="notify-example">shared_info.Notify({
+    Title = <span class="code-str">"Plugin Loaded"</span>,
+    Description = <span class="code-str">"Everything is ready."</span>,
+    Time = <span class="code-num">4</span>,
+})
+
+shared_info.Notify(<span class="code-str">"Quick notification"</span>, <span class="code-num">2</span>)</pre></div>
+        </div>
+        </div>
+      </section>
+
+      <section class="section" id="callbacks">
+        <div class="section-head"><div><h2>Callbacks & handles</h2></div><p>Create a control with a default callback, listen for later changes, read its current value, and set a new value from code.</p></div>
+        <div class="notice"><b>Pattern:</b> <code>Add...</code> creates the element and returns a handle. Use <code>GetValue()</code> to read it, <code>SetValue(value)</code> to change it, and <code>OnChanged(callback)</code> to listen for changes.</div>
+        <div class="code-wrap"><button class="copy" data-copy="callback-code">Copy</button><pre id="callback-code"><span class="code-key">local</span> toggle = shared_info.AddToggle(group, <span class="code-str">"Enabled"</span>, {
+    Default = <span class="code-key">true</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Default callback:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+toggle:SetValue(<span class="code-key">false</span>)
+print(<span class="code-str">"Current:"</span>, toggle:GetValue())
+
+toggle:OnChanged(<span class="code-key">function</span>(value)
+    print(<span class="code-str">"OnChanged:"</span>, value)
+<span class="code-key">end</span>)
+
+toggle:SetValue(<span class="code-key">true</span>)</pre></div>
+      </section>
+
+      <section class="section" id="plugin-api">
+        <div class="section-head"><div><h2>Plugin API reference</h2></div><p>Quick signatures for the public names available inside a <code>.plug</code> file.</p></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>API</th><th>Signature</th><th>Returns / notes</th></tr></thead><tbody>
+            <tr><td><code>Game</code></td><td><code>shared_info.Game</code></td><td>Read-only game name.</td></tr>
+            <tr><td><code>AddTab</code></td><td><code>AddTab(name, icon)</code></td><td>Returns a tab handle.</td></tr>
+            <tr><td><code>AddGroupbox</code></td><td><code>AddGroupbox(tab, name, side)</code></td><td><code>side</code> is <code>Left</code> or <code>Right</code>; returns a groupbox handle.</td></tr>
+            <tr><td><code>AddToggle</code></td><td><code>AddToggle(group, name, config)</code></td><td>Returns a toggle handle.</td></tr>
+            <tr><td><code>AddButton</code></td><td><code>AddButton(group, name, config)</code></td><td>Runs <code>Callback</code> when pressed.</td></tr>
+            <tr><td><code>AddSlider</code></td><td><code>AddSlider(group, name, config)</code></td><td>Returns a slider handle.</td></tr>
+            <tr><td><code>AddInput</code></td><td><code>AddInput(group, name, config)</code></td><td>Returns an input handle.</td></tr>
+            <tr><td><code>AddKeybind</code></td><td><code>AddKeybind(group, name, config)</code></td><td>Returns a keybind handle.</td></tr>
+            <tr><td><code>AddColorpicker</code></td><td><code>AddColorpicker(group, name, config)</code></td><td>Returns a colorpicker handle.</td></tr>
+            <tr><td><code>AddLabel</code></td><td><code>AddLabel(group, text)</code></td><td>Returns a label handle.</td></tr>
+            <tr><td><code>Notify</code></td><td><code>Notify(config)</code> or <code>Notify(text, duration)</code></td><td>Shows a notification.</td></tr>
+            <tr><td><code>Kick</code></td><td><code>Kick(reason)</code></td><td>Shows the plugin error/action through LuWare's kick message.</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <section class="section" id="security">
+        <div class="section-head"><div><h2>Plugin environment</h2></div><p>A plugin receives the documented public API through <code>shared_info</code> and a limited set of standard Lua/Roblox values needed to build plugins.</p></div>
+        <div class="grid">
+          <div class="card"><div class="pill">Public API</div><p>Use <code>shared_info</code> for plugin UI, notifications, game checks and the documented utility methods.</p></div>
+          <div class="card"><div class="pill">Built-in values</div><p>Common Lua helpers, standard libraries, tasks, enums and common Roblox value constructors are available for normal plugin code.</p></div>
+        </div>
+        <div class="notice" style="margin-top:14px"><b>Keep plugins portable:</b> build your plugin around the documented <code>shared_info</code> API so it behaves consistently with the LuWare plugin system.</div>
+      </section>
+
+      <section class="section" id="examples">
+        <div class="section-head"><div><h2>Complete example</h2></div><p>A complete <code>.plug</code> example that uses the public API, defaults, callbacks and value setters.</p></div>
+        <div class="code-wrap"><button class="copy" data-copy="full-example">Copy</button><pre id="full-example"><span class="code-key">if</span> shared_info.Game ~= <span class="code-str">"Murder Mystery 2"</span> <span class="code-key">then</span>
+    <span class="code-key">return</span>
+<span class="code-key">end</span>
+
+<span class="code-key">local</span> tab = shared_info.AddTab(<span class="code-str">"Example Plugin"</span>, <span class="code-str">"sparkles"</span>)
+<span class="code-key">local</span> group = shared_info.AddGroupbox(tab, <span class="code-str">"All Elements"</span>, <span class="code-str">"Left"</span>)
+
+<span class="code-key">local</span> label = shared_info.AddLabel(group, <span class="code-str">"Ready"</span>)
+label:SetText(<span class="code-str">"Plugin loaded"</span>)
+
+<span class="code-key">local</span> toggle = shared_info.AddToggle(group, <span class="code-str">"Enabled"</span>, {
+    Default = <span class="code-key">true</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Toggle callback:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+shared_info.AddButton(group, <span class="code-str">"Toggle Value"</span>, {
+    Callback = <span class="code-key">function</span>()
+        toggle:SetValue(<span class="code-key">not</span> toggle:GetValue())
+    <span class="code-key">end</span>,
+})
+
+<span class="code-key">local</span> slider = shared_info.AddSlider(group, <span class="code-str">"Speed"</span>, {
+    Default = <span class="code-num">50</span>, Min = <span class="code-num">0</span>, Max = <span class="code-num">100</span>,
+    Rounding = <span class="code-num">0</span>, Suffix = <span class="code-str">"%"</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Slider callback:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+<span class="code-key">local</span> input = shared_info.AddInput(group, <span class="code-str">"Name"</span>, {
+    Default = <span class="code-str">"LuWare"</span>,
+    Placeholder = <span class="code-str">"Type something..."</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Input callback:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+<span class="code-key">local</span> keybind = shared_info.AddKeybind(group, <span class="code-str">"Key"</span>, {
+    Default = <span class="code-str">"P"</span>,
+    Mode = <span class="code-str">"Press"</span>,
+    NoUI = <span class="code-key">false</span>,
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Keybind callback:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+<span class="code-key">local</span> color = shared_info.AddColorpicker(group, <span class="code-str">"Color"</span>, {
+    Default = Color3.fromRGB(<span class="code-num">110</span>, <span class="code-num">80</span>, <span class="code-num">255</span>),
+    Callback = <span class="code-key">function</span>(value)
+        print(<span class="code-str">"Color callback:"</span>, value)
+    <span class="code-key">end</span>,
+})
+
+slider:OnChanged(<span class="code-key">function</span>(value)
+    print(<span class="code-str">"Slider OnChanged:"</span>, value)
+<span class="code-key">end</span>)
+
+input:SetValue(<span class="code-str">"Xynnn"</span>)
+keybind:SetValue(<span class="code-str">"K"</span>)
+color:SetValue(Color3.fromRGB(<span class="code-num">255</span>, <span class="code-num">80</span>, <span class="code-num">80</span>))
+slider:SetValue(<span class="code-num">75</span>)
+
+print(<span class="code-str">"Toggle:"</span>, toggle:GetValue())
+print(<span class="code-str">"Slider:"</span>, slider:GetValue())
+print(<span class="code-str">"Input:"</span>, input:GetValue())
+print(<span class="code-str">"Keybind:"</span>, keybind:GetValue())
+print(<span class="code-str">"Color:"</span>, color:GetValue())
+
+shared_info.Notify({
+    Title = <span class="code-str">"Example Plugin"</span>,
+    Description = <span class="code-str">"Loaded successfully."</span>,
+    Time = <span class="code-num">4</span>,
+})</pre></div>
+      </section>
+
+      <div class="footer"><span>LuWare Plugin Documentation</span><a href="https://discord.gg/BN5nqDEWks" target="_blank" rel="noopener noreferrer">Join Discord ↗</a></div>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  const nav=[...document.querySelectorAll('#sideNav a')];
+  const sections=nav.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const setActive=()=>{
+    let current=sections[0];
+    for(const s of sections){
+      if(window.scrollY + 120 >= s.offsetTop) current=s;
+    }
+    nav.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#' + current.id));
+  };
+  window.addEventListener('scroll',setActive,{passive:true});
+  setActive();
+
+  document.querySelectorAll('.copy').forEach(btn=>{
+    btn.addEventListener('click', async()=>{
+      const el=document.getElementById(btn.dataset.copy);
+      if(!el) return;
+      const text=el.innerText;
+      try{
+        await navigator.clipboard.writeText(text);
+      }catch(_){
+        const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      const old=btn.textContent; btn.textContent='Copied';
+      setTimeout(()=>btn.textContent=old,1000);
+    });
+  });
+
+  const menuBtn=document.getElementById('menuBtn');
+  menuBtn?.addEventListener('click',()=>{
+    const items=nav.map(a=>a.textContent.trim()).join('  •  ');
+    alert(items);
+  });
+})();
+</script>
+</body>
+</html>
