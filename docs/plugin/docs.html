@@ -59,6 +59,8 @@ h1{font-size:clamp(2.8rem,7vw,5.6rem);line-height:.96;letter-spacing:-.045em;mar
 h1 .grad{background:linear-gradient(110deg,#fff 0%,#d8dfff 43%,#9bbcff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{max-width:690px;font-size:1.05rem;color:var(--muted);margin:0}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.hero-copy-markdown{margin-top:20px;display:inline-flex;align-items:center;gap:8px}
+.copy-icon{width:16px;height:16px;flex:none}
 .btn{border:1px solid var(--border);background:rgba(255,255,255,.035);color:var(--text);border-radius:9px;padding:10px 14px;cursor:pointer;transition:.16s ease;font-size:.85rem}
 .btn:hover{border-color:rgba(124,58,237,.42);background:var(--accent-soft)}
 .btn.primary{border-color:rgba(124,58,237,.42);background:linear-gradient(135deg,rgba(124,58,237,.27),rgba(110,168,254,.10))}
@@ -85,6 +87,7 @@ p{color:var(--muted);font-size:.92rem}
 .copy{position:absolute;right:11px;top:11px;padding:6px 9px;border:1px solid var(--border);background:rgba(7,8,13,.75);color:#bfc7d8;border-radius:7px;cursor:pointer;font-size:.68rem;z-index:1}
 .copy:hover{color:#fff;border-color:rgba(124,58,237,.45)}
 .code-wrap pre{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;border:1px solid var(--border);border-radius:11px;background:#090b11;padding:19px 18px;color:#dce5ff;font:400 .78rem/1.7 var(--mono)}
+.markdown-wrap{position:relative;margin-top:18px;max-width:100%;min-width:0;overflow:hidden}.markdown-wrap pre{display:block;width:100%;max-width:100%;min-width:0;max-height:760px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;border:1px solid var(--border);border-radius:11px;background:#090b11;padding:22px 20px;color:#dce5ff;font:400 .76rem/1.72 var(--mono);tab-size:2}.markdown-wrap .copy{right:11px;top:11px}.ai-note{margin-top:14px;padding:13px 15px;border:1px solid rgba(110,168,254,.18);background:var(--blue-soft);border-radius:10px;color:var(--muted);font-size:.82rem;line-height:1.6}.ai-note strong{color:var(--text);margin-right:6px}
 .code-comment{color:#697286}.code-key{color:#cba7ff}.code-str{color:#a9dbff}.code-fn{color:#98e7c1}.code-num{color:#f0c890}
 .notice{margin-top:16px;border:1px solid rgba(110,168,254,.20);background:linear-gradient(180deg,var(--blue-soft),rgba(255,255,255,.015));border-radius:10px;padding:13px 15px;color:#bdc8da;font-size:.82rem;overflow-wrap:anywhere;word-break:break-word}
 .notice b{color:#e5ecff;display:inline-block;margin-right:7px}
@@ -171,6 +174,349 @@ td code,li code,p code{font-family:var(--mono);font-size:.72rem;color:#dbe4ff;ba
         <div class="eyebrow"><i></i> LuWare plugin system</div>
         <h1>Build plugins.<br><span class="grad">Keep it simple.</span></h1>
         <p>Extend LuWare with your own tabs, groupboxes, controls, callbacks and notifications through the safe <code>shared_info</code> interface.</p>
+        <button class="btn primary hero-copy-markdown" type="button" data-copy="ai-markdown">
+          <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Copy Markdown</span>
+        </button>
+        <pre id="ai-markdown" hidden aria-hidden="true"># LuWare Plugin API — AI Reference
+
+You are writing a `.plug` plugin for LuWare. Use only the documented public API below. Do not invent functions, argument names, config fields, return values, or element types. Preserve the exact capitalization shown here.
+
+## Plugin entry
+
+A plugin can check the current game with:
+
+```lua
+if shared_info.Game ~= "Murder Mystery 2" then
+    return
+end
+```
+
+`shared_info.Game` is read-only game information.
+
+## Tabs
+
+```lua
+local tab = shared_info.AddTab("My Plugin", "sparkles")
+```
+
+`shared_info.AddTab(name, icon)`
+- `name`: string displayed as the plugin tab name.
+- `icon`: string containing a Lucide icon name only, such as `sparkles`, `settings`, or `puzzle`.
+- Do not use an image URL, asset ID, or custom icon object.
+- Returns a tab handle.
+
+## Groupboxes
+
+```lua
+local group = shared_info.AddGroupbox(tab, "Main", "Left")
+local right = shared_info.AddGroupbox(tab, "Extras", "Right")
+```
+
+`shared_info.AddGroupbox(tab, name, side)`
+- `tab`: tab handle returned by `AddTab`.
+- `name`: string used as the groupbox title.
+- `side`: exactly `"Left"` or `"Right"`.
+- Returns a groupbox handle.
+
+A tab handle also supports:
+
+```lua
+local group = tab:AddGroupbox("Main", "Left")
+```
+
+## Labels
+
+```lua
+local label = shared_info.AddLabel(group, "Waiting...")
+label:SetText("Ready!")
+```
+
+`shared_info.AddLabel(group, text)`
+- `group`: groupbox handle.
+- `text`: string displayed by the label.
+- Returns a label handle.
+- Label handle method: `SetText(text)`.
+
+## Toggle
+
+```lua
+local enabled = shared_info.AddToggle(group, "Enabled", {
+    Default = true,
+    Callback = function(value)
+        print("Toggle callback:", value)
+    end,
+})
+
+enabled:SetValue(false)
+print(enabled:GetValue())
+enabled:OnChanged(function(value)
+    print("Changed:", value)
+end)
+```
+
+`shared_info.AddToggle(group, name, config)`
+- `group`: groupbox handle.
+- `name`: string shown next to the toggle.
+- `config.Default`: boolean initial value.
+- `config.Callback`: function(value) called when the value changes.
+- Returns a toggle handle.
+- Handle methods: `GetValue()`, `SetValue(value)`, `OnChanged(callback)`, `RunChanged()`.
+- `SetValue(value)` expects a boolean.
+
+## Button
+
+```lua
+shared_info.AddButton(group, "Say Hello", {
+    Callback = function()
+        shared_info.Notify("Hello from my plugin!", 2)
+    end,
+})
+```
+
+`shared_info.AddButton(group, name, config)`
+- `group`: groupbox handle.
+- `name`: button text.
+- `config.Callback`: function() called when the button is pressed.
+- Does not use `Default`, `Min`, `Max`, `Prefix`, or `Suffix`.
+- The documented button API is action-based; do not expect `GetValue()` or `SetValue()` on it.
+
+## Slider
+
+```lua
+local speed = shared_info.AddSlider(group, "Speed", {
+    Default = 50,
+    Min = 0,
+    Max = 100,
+    Rounding = 0,
+    Prefix = "$",
+    Suffix = "%",
+    Callback = function(value)
+        print("Slider callback:", value)
+    end,
+})
+
+speed:SetValue(75)
+print(speed:GetValue())
+speed:OnChanged(function(value)
+    print("Slider changed:", value)
+end)
+```
+
+`shared_info.AddSlider(group, name, config)`
+- `group`: groupbox handle.
+- `name`: string shown above the slider.
+- `config.Default`: number used as the initial value.
+- `config.Min`: lowest allowed number.
+- `config.Max`: highest allowed number.
+- `config.Rounding`: decimal precision used by the control.
+- `config.Prefix`: optional string shown BEFORE the number, for example `$50`.
+- `config.Suffix`: optional string shown AFTER the number, for example `50%` or `5s`.
+- `config.Callback`: function(value) called when the slider value changes.
+- Returns a slider handle.
+- Handle methods: `GetValue()`, `SetValue(value)`, `OnChanged(callback)`, `RunChanged()`.
+- Keep prefix/suffix semantics correct: currency-like prefixes go before the number; units such as `%` and `s` go after it.
+
+## Input
+
+```lua
+local name = shared_info.AddInput(group, "Name", {
+    Default = "LuWare",
+    Placeholder = "Type your name...",
+    Numeric = false,
+    Finished = true,
+    ClearTextOnFocus = false,
+    Callback = function(value)
+        print("Input callback:", value)
+    end,
+})
+
+name:SetValue("Xynnn")
+print(name:GetValue())
+name:OnChanged(function(value)
+    print("Input changed:", value)
+end)
+```
+
+`shared_info.AddInput(group, name, config)`
+- `group`: groupbox handle.
+- `name`: string label for the input.
+- `config.Default`: initial text string.
+- `config.Placeholder`: hint shown while empty.
+- `config.Numeric`: boolean; use `true` when the input should accept numeric entry.
+- `config.Finished`: boolean controlling whether the callback waits for editing to finish.
+- `config.ClearTextOnFocus`: boolean controlling whether existing text is cleared on focus.
+- `config.Callback`: function(value) called when the input value is committed according to the control's `Finished` behavior.
+- Returns an input handle.
+- Handle methods: `GetValue()`, `SetValue(value)`, `OnChanged(callback)`, `RunChanged()`.
+
+## Keybind
+
+```lua
+local key = shared_info.AddKeybind(group, "Action Key", {
+    Default = "P",
+    Mode = "Press",
+    NoUI = false,
+    Callback = function(value)
+        print("Keybind callback:", value)
+    end,
+})
+
+key:SetValue("K")
+print(key:GetValue())
+key:OnChanged(function(value)
+    print("Keybind changed:", value)
+end)
+```
+
+`shared_info.AddKeybind(group, name, config)`
+- `group`: groupbox handle.
+- `name`: string label for the key picker.
+- `config.Default`: initial key value.
+- `config.Mode`: string describing keybind behavior; `"Press"` is a documented example.
+- `config.NoUI`: boolean controlling whether the keybind appears in the LuWare keybind display.
+- `config.Callback`: function(value) called when the keybind value changes.
+- Returns a keybind handle.
+- Handle methods: `GetValue()`, `SetValue(value)`, `OnChanged(callback)`, `RunChanged()`.
+
+## Colorpicker
+
+```lua
+local accent = shared_info.AddColorpicker(group, "Accent", {
+    Default = Color3.fromRGB(110, 80, 255),
+    Callback = function(color)
+        print("Color callback:", color)
+    end,
+})
+
+accent:SetValue(Color3.fromRGB(255, 80, 80))
+print(accent:GetValue())
+accent:OnChanged(function(color)
+    print("Color changed:", color)
+end)
+```
+
+`shared_info.AddColorpicker(group, name, config)`
+- `group`: groupbox handle.
+- `name`: string label for the colorpicker.
+- `config.Default`: initial `Color3` value.
+- `config.Callback`: function(color) called when the color changes.
+- Returns a colorpicker handle.
+- Handle methods: `GetValue()`, `SetValue(color)`, `OnChanged(callback)`, `RunChanged()`.
+- `SetValue` should receive a `Color3` value.
+
+## Notifications
+
+Config form:
+
+```lua
+shared_info.Notify({
+    Title = "Plugin Loaded",
+    Description = "Everything is ready.",
+    Time = 4,
+})
+```
+
+Short form:
+
+```lua
+shared_info.Notify("Quick notification", 2)
+```
+
+`shared_info.Notify(...)`
+- Config `Title`: string notification title.
+- Config `Description`: string main notification text.
+- Config `Time`: number controlling how long the notification remains visible.
+- Short form first argument: notification text.
+- Short form second argument: duration.
+
+## Callbacks and handles
+
+For controls that return handles:
+
+```lua
+local control = shared_info.AddToggle(group, "Enabled", {
+    Default = false,
+    Callback = function(value)
+        print("Default Callback:", value)
+    end,
+})
+
+print(control:GetValue())
+control:SetValue(true)
+control:OnChanged(function(value)
+    print("OnChanged:", value)
+end)
+```
+
+Use the returned handle from the element-creation call. Do not invent alternate handle methods.
+
+Important callback rule:
+- `Callback` belongs inside the element's config table.
+- `Callback` receives the new value for Toggle, Slider, Input, Keybind, and Colorpicker.
+- Button `Callback` receives no value.
+- Use `OnChanged(callback)` for an additional listener after the handle has been created.
+
+## Public shared_info API
+
+Documented names:
+- `shared_info.Game`
+- `shared_info.AddTab(name, icon)`
+- `shared_info.AddGroupbox(tab, name, side)`
+- `shared_info.AddToggle(group, name, config)`
+- `shared_info.AddButton(group, name, config)`
+- `shared_info.AddSlider(group, name, config)`
+- `shared_info.AddInput(group, name, config)`
+- `shared_info.AddKeybind(group, name, config)`
+- `shared_info.AddColorpicker(group, name, config)`
+- `shared_info.AddLabel(group, text)`
+- `shared_info.Notify(config)` or `shared_info.Notify(text, duration)`
+- `shared_info.Kick(reason)`
+
+`shared_info.Kick(reason)` accepts a string reason.
+
+## Minimal valid plugin
+
+```lua
+if shared_info.Game ~= "Murder Mystery 2" then
+    return
+end
+
+local tab = shared_info.AddTab("My Plugin", "sparkles")
+local group = shared_info.AddGroupbox(tab, "Main", "Left")
+
+local enabled = shared_info.AddToggle(group, "Enabled", {
+    Default = false,
+    Callback = function(value)
+        shared_info.Notify("Enabled: " .. tostring(value), 2)
+    end,
+})
+
+shared_info.AddButton(group, "Enable", {
+    Callback = function()
+        enabled:SetValue(true)
+    end,
+})
+
+shared_info.Notify("Plugin loaded!", 3)
+```
+
+## Generation rules for AI
+
+1. Use only the public names and signatures documented above.
+2. Keep config keys exactly as documented and use the correct value types.
+3. Do not invent unsupported options.
+4. Return values are handles where the documentation says they are; call documented handle methods only.
+5. For `AddTab`, the icon is a Lucide icon name string.
+6. For `AddGroupbox`, `side` must be `"Left"` or `"Right"`.
+7. Slider `Prefix` is rendered before the number; `Suffix` is rendered after it.
+8. Put control callbacks inside `config.Callback`.
+9. Use `SetValue()` only with a value appropriate to that element.
+10. Use `GetValue()` to read a current control value.
+11. Use `OnChanged(callback)` to attach another change listener after creation.
+12. Prefer a small, working plugin over guessed APIs.
+13. When documentation does not specify an option or behavior, do not assume it exists; ask for clarification or omit it.
+</pre>
         <div class="hero-actions">
           <a class="btn primary" href="#examples">View Example</a>
           <a class="btn" href="#plugin-api">Browse API</a>
@@ -559,18 +905,44 @@ shared_info.Notify({
   window.addEventListener('scroll',setActive,{passive:true});
   setActive();
 
-  document.querySelectorAll('.copy').forEach(btn=>{
-    btn.addEventListener('click', async()=>{
-      const el=document.getElementById(btn.dataset.copy);
-      if(!el) return;
-      const text=el.innerText;
-      try{
+  const copyText = async (text) => {
+    if(!text) return false;
+    try{
+      if(navigator.clipboard && window.isSecureContext){
         await navigator.clipboard.writeText(text);
-      }catch(_){
-        const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        return true;
       }
-      const old=btn.textContent; btn.textContent='Copied';
-      setTimeout(()=>btn.textContent=old,1000);
+    }catch(_){}
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=text;
+      ta.setAttribute('readonly','');
+      ta.style.position='fixed';
+      ta.style.left='-9999px';
+      ta.style.top='0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0,ta.value.length);
+      const ok=document.execCommand('copy');
+      ta.remove();
+      return ok;
+    }catch(_){
+      return false;
+    }
+  };
+
+  document.querySelectorAll('[data-copy]').forEach(btn=>{
+    btn.addEventListener('click', async()=>{
+      const id=btn.getAttribute('data-copy');
+      const el=id ? document.getElementById(id) : null;
+      if(!el) return;
+      const ok=await copyText(el.textContent || '');
+      const old=btn.innerHTML;
+      btn.innerHTML=ok
+        ? '<svg class=\"copy-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m5 12 4 4L19 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg><span>Copied</span>'
+        : '<span>Copy failed</span>';
+      setTimeout(()=>btn.innerHTML=old,1000);
     });
   });
 
