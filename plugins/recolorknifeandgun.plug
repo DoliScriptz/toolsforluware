@@ -1,0 +1,248 @@
+if shared_info.Game ~= "Murder Mystery 2" then
+    shared_info.Kick("do not the cat ;3")
+    return
+end
+
+shared.LuWareGunKnifeRecolor = shared.LuWareGunKnifeRecolor or {}
+
+local mrrp = shared.LuWareGunKnifeRecolor
+local goobers = game:GetService("Players")
+local nyoom = game:GetService("RunService")
+local meowster = goobers.LocalPlayer
+
+mrrp.thingy = mrrp.thingy or workspace:FindFirstChild("WeaponDisplays")
+mrrp.bepis = mrrp.bepis or Color3.fromRGB(255, 255, 255)
+mrrp.sillyBlue = mrrp.sillyBlue or Color3.fromRGB(255, 255, 255)
+mrrp.peepoGun = mrrp.peepoGun or false
+mrrp.peepoKnife = mrrp.peepoKnife or false
+mrrp.gunGoBrr = nil
+mrrp.knifeGoBrr = nil
+mrrp.gunGoYeet = nil
+mrrp.knifeGoYeet = nil
+mrrp.theWires = mrrp.theWires or {}
+
+local catTab = shared_info.AddTab("Gun and Knifes Recolorable", "palette")
+local catBox = shared_info.AddGroupbox(catTab, "Recolor", "Left")
+
+shared_info.AddLabel(catBox, "Doesn't work on every knife and gun.")
+
+local paintThePew = shared_info.AddColorpicker(catBox, "Gun", {
+    Default = mrrp.bepis,
+    Callback = function(crayon)
+        mrrp.bepis = crayon
+    end,
+})
+
+local paintTheStabby = shared_info.AddColorpicker(catBox, "Knife", {
+    Default = mrrp.sillyBlue,
+    Callback = function(crayon)
+        mrrp.sillyBlue = crayon
+    end,
+})
+
+local pewPewMode = shared_info.AddToggle(catBox, "Color Gun", {
+    Default = mrrp.peepoGun,
+    Callback = function(braincell)
+        mrrp.peepoGun = braincell
+    end,
+})
+
+local stabbyMode = shared_info.AddToggle(catBox, "Color Knife", {
+    Default = mrrp.peepoKnife,
+    Callback = function(braincell)
+        mrrp.peepoKnife = braincell
+    end,
+})
+
+local function bonkTheMesh(meshy, crayons)
+    if meshy and meshy:IsA("SpecialMesh") then
+        meshy.VertexColor = Vector3.new(
+            crayons.R,
+            crayons.G,
+            crayons.B
+        )
+    end
+end
+
+local function whereDidThePartGo(thing)
+    if not thing then
+        return
+    end
+
+    if thing:IsA("BasePart") then
+        return thing
+    end
+
+    return thing:FindFirstChildWhichIsA("BasePart", true)
+end
+
+local function summonTheMesh(thing)
+    if not thing then
+        return
+    end
+
+    return thing:FindFirstChildOfClass("SpecialMesh")
+        or thing:FindFirstChildWhichIsA("SpecialMesh", true)
+end
+
+local function findTheNearestGoober(displayName)
+    local human = meowster.Character
+    local rooty = human and human:FindFirstChild("HumanoidRootPart")
+    local weaponLand = mrrp.thingy
+
+    if not rooty or not weaponLand then
+        return
+    end
+
+    local nearestGoblin
+    local smallestNumber = math.huge
+
+    for _, mysteriousObject in ipairs(weaponLand:GetChildren()) do
+        if mysteriousObject.Name == displayName then
+            local chunkyPart = whereDidThePartGo(mysteriousObject)
+
+            if chunkyPart then
+                local numberGoUp = (rooty.Position - chunkyPart.Position).Magnitude
+
+                if numberGoUp < smallestNumber then
+                    smallestNumber = numberGoUp
+                    nearestGoblin = mysteriousObject
+                end
+            end
+        end
+    end
+
+    return nearestGoblin
+end
+
+local function updateTheGoblinDisplays()
+    if mrrp.peepoGun then
+        local pewDisplay = findTheNearestGoober("GunDisplay")
+
+        if pewDisplay ~= mrrp.gunGoBrr then
+            mrrp.gunGoBrr = pewDisplay
+        end
+
+        bonkTheMesh(
+            summonTheMesh(mrrp.gunGoBrr),
+            mrrp.bepis
+        )
+    end
+
+    if mrrp.peepoKnife then
+        local stabDisplay = findTheNearestGoober("KnifeDisplay")
+
+        if stabDisplay ~= mrrp.knifeGoBrr then
+            mrrp.knifeGoBrr = stabDisplay
+        end
+
+        bonkTheMesh(
+            summonTheMesh(mrrp.knifeGoBrr),
+            mrrp.sillyBlue
+        )
+    end
+end
+
+local function inspectTheGoober(tool)
+    if not tool or not tool:IsA("Tool") then
+        return
+    end
+
+    local handle = tool:FindFirstChild("Handle")
+
+    if not handle then
+        return
+    end
+
+    local funkyMesh = handle:FindFirstChildOfClass("SpecialMesh")
+
+    if tool.Name == "Gun" then
+        mrrp.gunGoYeet = funkyMesh
+
+        if mrrp.peepoGun then
+            bonkTheMesh(funkyMesh, mrrp.bepis)
+        end
+    elseif tool.Name == "Knife" then
+        mrrp.knifeGoYeet = funkyMesh
+
+        if mrrp.peepoKnife then
+            bonkTheMesh(funkyMesh, mrrp.sillyBlue)
+        end
+    end
+end
+
+local function goodbyeGoober(tool)
+    if not tool then
+        return
+    end
+
+    if tool.Name == "Gun" then
+        mrrp.gunGoYeet = nil
+    elseif tool.Name == "Knife" then
+        mrrp.knifeGoYeet = nil
+    end
+end
+
+local function beholdTheCharacter(character)
+    mrrp.gunGoYeet = nil
+    mrrp.knifeGoYeet = nil
+
+    for _, suspiciousObject in ipairs(character:GetChildren()) do
+        if suspiciousObject:IsA("Tool") then
+            inspectTheGoober(suspiciousObject)
+        end
+    end
+
+    table.insert(mrrp.theWires, character.ChildAdded:Connect(function(suspiciousObject)
+        if suspiciousObject:IsA("Tool") then
+            inspectTheGoober(suspiciousObject)
+        end
+    end))
+
+    table.insert(mrrp.theWires, character.ChildRemoved:Connect(function(suspiciousObject)
+        if suspiciousObject:IsA("Tool") then
+            goodbyeGoober(suspiciousObject)
+        end
+    end))
+end
+
+if meowster.Character then
+    beholdTheCharacter(meowster.Character)
+end
+
+table.insert(mrrp.theWires, meowster.CharacterAdded:Connect(beholdTheCharacter))
+
+if mrrp.thingy then
+    table.insert(mrrp.theWires, mrrp.thingy.ChildAdded:Connect(function(mysteriousObject)
+        if mysteriousObject.Name == "GunDisplay"
+            or mysteriousObject.Name == "KnifeDisplay" then
+            task.defer(updateTheGoblinDisplays)
+        end
+    end))
+
+    table.insert(mrrp.theWires, mrrp.thingy.ChildRemoved:Connect(function(mysteriousObject)
+        if mysteriousObject == mrrp.gunGoBrr then
+            mrrp.gunGoBrr = nil
+        end
+
+        if mysteriousObject == mrrp.knifeGoBrr then
+            mrrp.knifeGoBrr = nil
+        end
+    end))
+end
+
+table.insert(mrrp.theWires, nyoom.Heartbeat:Connect(function()
+    if mrrp.peepoGun or mrrp.peepoKnife then
+        updateTheGoblinDisplays()
+    end
+
+    if mrrp.peepoGun then
+        bonkTheMesh(mrrp.gunGoYeet, mrrp.bepis)
+    end
+
+    if mrrp.peepoKnife then
+        bonkTheMesh(mrrp.knifeGoYeet, mrrp.sillyBlue)
+    end
+end))
+
+shared_info.Notify("Gun and Knifes Recolorable loaded!", 3)
